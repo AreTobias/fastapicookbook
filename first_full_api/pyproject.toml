@@ -1,0 +1,10 @@
+[project]
+name = "first-full-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[all]>=0.115.13",
+    "pytest>=8.4.1",
+]
