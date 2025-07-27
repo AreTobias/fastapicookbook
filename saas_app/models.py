@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -5,7 +7,6 @@ from sqlalchemy.orm import (
     mapped_column,
     sessionmaker,
 )
-from functools import lru_cache
 
 
 class Base(DeclarativeBase):
@@ -15,7 +16,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
+    username: Mapped[str]
     email: Mapped[str]
     hashed_password: Mapped[str]
 
@@ -36,9 +37,8 @@ def get_engine():
     return create_engine(DB_URL)
 
 
-get_session():
-    Session = sessionmaker(
-        autocommit=False, autoflush=False, bind=get_engine())
+def get_session():
+    Session = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
     try:
         session = Session()
         yield session

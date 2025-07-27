@@ -1,4 +1,19 @@
 from typing import Annotated
-from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status
-from models import Base, get_session
+
+from pydantic import BaseModel, EmailStr, Field
+
+
+class UserCreateBody(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+
+
+class UserCreateResponse(BaseModel):
+    username: str
+    email: EmailStr
+
+
+class ResponseCreateUser(BaseModel):
+    message: Annotated[str, Field(default="User Created")]
+    user: UserCreateResponse
