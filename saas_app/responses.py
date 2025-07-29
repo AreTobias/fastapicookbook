@@ -17,3 +17,8 @@ class UserCreateResponse(BaseModel):
 class ResponseCreateUser(BaseModel):
     message: Annotated[str, Field(default="User Created")]
     user: UserCreateResponse
+
+
+class ResponseGetUserBody(BaseModel):
+    username: str
+    email: str

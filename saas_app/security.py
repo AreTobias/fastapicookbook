@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from email_validator import (
     EmailNotValidError,
     validate_email,
@@ -35,7 +37,7 @@ class Token(BaseModel):
 @router.post(
     "/token",
     response_model=Token,
-    responses=...,  # Document the responses
+    # responses=...,  # Document the responses
 )
 def get_user_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -49,14 +51,14 @@ def get_user_access_token(
             detail="Incorrect username or password",
         )
 
-    access_token = create_access_token(data={"sub": user.name})
+    access_token = create_access_token(data={"sub": user.username})
 
-    return {"access_token": access_token, "token_type": bearer}
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.get(
     "/users/me",
-    responses=...,  # Document responses
+    # responses=...,  # Document responses
 )
 def read_user_me(
     token: str = Depends(oauth2_scheme),
@@ -92,7 +94,7 @@ def create_access_token(data: dict) -> str:
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algoright=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     return encoded_jwt
 
@@ -100,7 +102,7 @@ def create_access_token(data: dict) -> str:
 def decode_access_token(token: str, session: Session) -> User | None:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        uisername: str = payload.get("sub")
+        username: str = payload.get("sub")
     except JWTError:
         return
 

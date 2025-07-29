@@ -2,6 +2,8 @@ from contextlib import (
     asynccontextmanager,
 )
 
+import premium_access
+import rbac
 import security
 from models import Base, get_engine, get_session
 from operations import add_user
@@ -20,6 +22,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Saas application", lifespan=lifespan)
 
 app.include_router(security.router)
+app.include_router(premium_access.router)
+app.include_router(rbac.router)
 
 
 @app.post(

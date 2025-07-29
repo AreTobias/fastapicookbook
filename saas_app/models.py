@@ -8,17 +8,25 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
+from enum import Enum
+
 
 class Base(DeclarativeBase):
     pass
 
 
+class Role(str, Enum):
+    basic = "Basic"
+    premium = "Premium"
+
+
 class User(Base):
     __tablename__ = "user"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str]
-    email: Mapped[str]
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    username: Mapped[str] = mapped_column(unique=True, index=True)
+    email: Mapped[str] = mapped_column(unique=True, index=True)
     hashed_password: Mapped[str]
+    role: Mapped[Role] = mapped_column(default=Role.basic)
 
 
 def get_db():
